@@ -40,9 +40,11 @@ function VibhaktiTableView() {
   }));
 
   return (
-    <section className="panel-grid">
-      <h2 className="panel-title">Vibhakti Table - विभक्ति तालिका</h2>
-      <p className="panel-subtext">Review seven case forms across singular, dual, and plural.</p>
+    <div className="section-card panel-grid">
+      <h2 className="panel-title">
+        Case Table <span className="title-suffix">- विभक्ति तालिका</span>
+      </h2>
+      <p className="panel-subtext">Compare singular, dual, and plural forms by case.</p>
 
       <div className="selector-block">
         <label htmlFor="vibhakti-word" className="sanskrit-text">
@@ -65,7 +67,7 @@ function VibhaktiTableView() {
         headers={["Case", "Singular", "Dual", "Plural"]}
         rows={tableRows}
       />
-    </section>
+    </div>
   );
 }
 

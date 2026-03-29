@@ -30,13 +30,15 @@ function DhatuTableView() {
   }));
 
   return (
-    <section className="panel-grid">
-      <h2 className="panel-title">Dhaturupa Table - धातुरूप तालिका</h2>
-      <p className="panel-subtext">Check verb forms by person across major tenses.</p>
+    <div className="section-card panel-grid">
+      <h2 className="panel-title">
+        Verb Table <span className="title-suffix">- धातुरूप तालिका</span>
+      </h2>
+      <p className="panel-subtext">Review tense forms for each person across key roots.</p>
 
       <div className="selector-block">
         <label htmlFor="dhatu-root" className="sanskrit-text">
-          Select Root (धातुः)
+          Select Verb Root
         </label>
         <select
           id="dhatu-root"
@@ -44,9 +46,9 @@ function DhatuTableView() {
           value={selectedRoot}
           onChange={(event) => setSelectedRoot(event.target.value)}
         >
-          <option value="bhu">भू (to be)</option>
-          <option value="kri">कृ (to do)</option>
-          <option value="gam">गम् (to go)</option>
+          <option value="bhu">भू - to be</option>
+          <option value="kri">कृ - to do</option>
+          <option value="gam">गम्/गच्छ - to go</option>
         </select>
       </div>
 
@@ -55,7 +57,7 @@ function DhatuTableView() {
         headers={["Person", "Present", "Perfect", "Future"]}
         rows={tableRows}
       />
-    </section>
+    </div>
   );
 }
 

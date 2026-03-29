@@ -19,9 +19,11 @@ function GrammarHelpView() {
   }, [query]);
 
   return (
-    <section className="panel-grid">
-      <h2 className="panel-title">Grammar Help - व्याकरण सहायता</h2>
-      <p className="panel-subtext">Search core rules and examples for quick reference.</p>
+    <div className="section-card panel-grid">
+      <h2 className="panel-title">
+        Grammer Helper <span className="title-suffix">- व्याकरण सहायता</span>
+      </h2>
+      <p className="panel-subtext">Search rules quickly and review examples while practicing.</p>
 
       <div className="input-shell">
         <input
@@ -58,7 +60,7 @@ function GrammarHelpView() {
           ))
         )}
       </div>
-    </section>
+    </div>
   );
 }
 

@@ -78,9 +78,11 @@ function SmartEditorView() {
   };
 
   return (
-    <section className="panel-grid">
-      <h2 className="panel-title">रचना-सहायकः (Smart Editor)</h2>
-      <p className="panel-subtext">Analyze sentence agreement and apply contextual grammar fixes.</p>
+    <div id="smart-editor-view" className="section-card panel-grid">
+      <h2 className="panel-title">
+        रचना-सहायकः <span className="title-suffix">(Smart Editor)</span>
+      </h2>
+      <p className="panel-subtext">Analyze agreement and apply grammar fixes with one click.</p>
 
       <div className="editor-layout">
         <EditorWorkspace
@@ -114,7 +116,7 @@ function SmartEditorView() {
           )}
         </aside>
       </div>
-    </section>
+    </div>
   );
 }
 

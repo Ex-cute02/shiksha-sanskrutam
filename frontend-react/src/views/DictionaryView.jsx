@@ -17,9 +17,11 @@ function DictionaryView() {
   const primaryWord = filteredEntries[0]?.word ?? "";
 
   return (
-    <section className="panel-grid">
-      <h2 className="panel-title">Dictionary - शब्दार्थः</h2>
-      <p className="panel-subtext">Find Sanskrit word meanings with part-of-speech tags.</p>
+    <div className="section-card panel-grid">
+      <h2 className="panel-title">
+        Dictionary <span className="title-suffix">- शब्दार्थः</span>
+      </h2>
+      <p className="panel-subtext">Find meanings and grammatical tags for common words.</p>
 
       <div className="input-shell">
         <input
@@ -55,9 +57,9 @@ function DictionaryView() {
         className="search-btn"
         onClick={() => playPronunciation(primaryWord)}
       >
-        Pronounce Word
+        Pronounce
       </button>
-    </section>
+    </div>
   );
 }
 

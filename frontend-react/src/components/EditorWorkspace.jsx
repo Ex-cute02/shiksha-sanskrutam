@@ -12,7 +12,7 @@ function EditorWorkspace({
           id="editor-input"
           className="translate-textarea sanskrit-text"
           rows={7}
-          placeholder="Type or paste Sanskrit text for grammar analysis"
+          placeholder="Type here in English (e.g., aham gachhati) to see magic..."
           value={text}
           onChange={(event) => onTextChange(event.target.value)}
         />

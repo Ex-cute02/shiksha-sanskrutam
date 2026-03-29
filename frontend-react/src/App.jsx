@@ -10,27 +10,27 @@ import VibhaktiTableView from "./views/VibhaktiTableView";
 function App() {
   return (
     <AppShell>
-      <div className="views-stack">
+      <div className="views-stack sections">
         <LandingHero />
 
-        <div id="grammar-help" className="content-section">
+        <section id="grammar-help" className="full-section">
           <GrammarHelpView />
-        </div>
-        <div id="translation" className="content-section">
+        </section>
+        <section id="translation" className="full-section">
           <TranslationView />
-        </div>
-        <div id="dictionary" className="content-section">
+        </section>
+        <section id="dictionary" className="full-section">
           <DictionaryView />
-        </div>
-        <div id="smart-editor" className="content-section">
+        </section>
+        <section id="smart-editor" className="full-section">
           <SmartEditorView />
-        </div>
-        <div id="vibhakti-table" className="content-section">
+        </section>
+        <section id="vibhakti-table" className="full-section">
           <VibhaktiTableView />
-        </div>
-        <div id="dhatu-table" className="content-section">
+        </section>
+        <section id="dhatu-table" className="full-section">
           <DhatuTableView />
-        </div>
+        </section>
       </div>
     </AppShell>
   );
