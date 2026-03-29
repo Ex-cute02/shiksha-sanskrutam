@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --bg-color: #fffed1;
   --text-color: #2d2615;
@@ -7,6 +11,48 @@
   --heading-size: clamp(1.3rem, 1.1rem + 1.1vw, 1.9rem);
   --subtext-size: clamp(0.92rem, 0.88rem + 0.2vw, 1rem);
   --button-size: clamp(0.9rem, 0.86rem + 0.15vw, 0.98rem);
+
+  --background: 48 100% 91%;
+  --foreground: 44 36% 13%;
+  --card: 48 100% 96%;
+  --card-foreground: 44 36% 13%;
+  --popover: 48 100% 96%;
+  --popover-foreground: 44 36% 13%;
+  --primary: 358 75% 43%;
+  --primary-foreground: 48 100% 92%;
+  --secondary: 38 100% 54%;
+  --secondary-foreground: 44 36% 13%;
+  --muted: 46 70% 86%;
+  --muted-foreground: 36 18% 36%;
+  --accent: 46 70% 86%;
+  --accent-foreground: 44 36% 13%;
+  --destructive: 0 80% 50%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 42 48% 72%;
+  --input: 42 48% 72%;
+  --ring: 358 75% 43%;
+}
+
+.dark {
+  --background: 30 6% 10%;
+  --foreground: 48 30% 93%;
+  --card: 30 6% 14%;
+  --card-foreground: 48 30% 93%;
+  --popover: 30 6% 14%;
+  --popover-foreground: 48 30% 93%;
+  --primary: 358 75% 55%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 33 12% 20%;
+  --secondary-foreground: 48 30% 93%;
+  --muted: 33 12% 20%;
+  --muted-foreground: 40 12% 66%;
+  --accent: 33 12% 20%;
+  --accent-foreground: 48 30% 93%;
+  --destructive: 0 70% 35%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 33 10% 26%;
+  --input: 33 10% 26%;
+  --ring: 358 75% 55%;
 }
 
 @font-face {
