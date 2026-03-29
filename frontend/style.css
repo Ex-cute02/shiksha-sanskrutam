@@ -135,9 +135,11 @@ body {
 }
 
 .nav-link {
+  display: inline-block;
   border: 1px solid transparent;
   background: transparent;
   color: #ffa60d;
+  text-decoration: none;
   border-radius: 999px;
   padding: 0.4rem 0.78rem;
   font-family: "Inter", sans-serif;

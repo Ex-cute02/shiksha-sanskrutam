@@ -1,6 +1,3 @@
-const navLinks = document.querySelectorAll(".nav-link");
-const sections = document.querySelectorAll(".full-section");
-const contentSections = document.querySelectorAll(".full-section:not(#hero)");
 const appHeader = document.querySelector(".app-header");
 const heroSection = document.getElementById("hero");
 const searchRuleInput = document.getElementById("search-rule");
@@ -175,13 +172,6 @@ function bindTransliteration(inputElement) {
 
   inputElement.addEventListener("input", () => {
     debouncedTransliteration();
-  });
-}
-
-function setActiveNav(sectionId) {
-  navLinks.forEach((link) => {
-    const isActive = link.dataset.target === sectionId;
-    link.classList.toggle("is-active", isActive);
   });
 }
 
@@ -365,7 +355,6 @@ function renderEditorSuggestions(hasGrammarIssue) {
       <p>The subject is 'अहम्' (First Person Singular), so the verb must also be First Person Singular (गच्छामि, not गच्छति).</p>
       <div class="suggestion-actions">
         <button id="apply-fix-btn" class="search-btn" type="button">Apply Fix</button>
-        <button id="view-dhaturupa-btn" class="search-btn" type="button">View Dhaturupa</button>
       </div>
     </div>
   `;
@@ -379,21 +368,6 @@ function renderEditorSuggestions(hasGrammarIssue) {
 
       editorInput.value = editorInput.value.replaceAll("गच्छति", "गच्छामि");
       mockAnalyzeText();
-    });
-  }
-
-  const viewDhaturupaBtn = document.getElementById("view-dhaturupa-btn");
-  if (viewDhaturupaBtn) {
-    viewDhaturupaBtn.addEventListener("click", () => {
-      if (dhatuRootSelect) {
-        dhatuRootSelect.value = "gam";
-      }
-      renderDhatuTable("gam");
-      const dhatuSection = document.getElementById("dhatu-table");
-      if (dhatuSection) {
-        dhatuSection.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-      setActiveNav("dhatu-table");
     });
   }
 }
@@ -424,34 +398,6 @@ function mockAnalyzeText() {
   renderEditorSuggestions(hasGrammarIssue);
 }
 
-navLinks.forEach((link) => {
-  link.addEventListener("click", () => {
-    const sectionId = link.dataset.target;
-    const target = document.getElementById(sectionId);
-    if (!target) {
-      return;
-    }
-
-    target.scrollIntoView({ behavior: "smooth", block: "start" });
-    setActiveNav(sectionId);
-  });
-});
-
-const sectionObserver = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        setActiveNav(entry.target.id);
-      }
-    });
-  },
-  { threshold: 0.6 }
-);
-
-contentSections.forEach((section) => {
-  sectionObserver.observe(section);
-});
-
 const heroObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -469,10 +415,6 @@ if (heroSection) {
   heroObserver.observe(heroSection);
 } else if (appHeader) {
   appHeader.classList.add("is-visible");
-}
-
-if (sections.length > 1) {
-  setActiveNav(sections[1].id);
 }
 
 if (searchRuleInput && ruleResult) {
