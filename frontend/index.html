@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shiksha Sanskritam - Sanskrit Helper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Noto+Sans+Devanagari:wght@400;700&family=Outfit:wght@800;900&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1 class="app-title">shiksha sanskrutam</h1>
+
+    <nav class="top-nav" aria-label="Main navigation">
+      <button class="nav-link" type="button" data-target="grammar-help">Grammar Help</button>
+      <button class="nav-link" type="button" data-target="translation">Translation</button>
+      <button class="nav-link" type="button" data-target="dictionary">Dictionary</button>
+      <button class="nav-link" type="button" data-target="smart-editor-view">Smart Editor</button>
+      <button class="nav-link" type="button" data-target="vibhakti-table">Tables -> Vibhakti</button>
+      <button class="nav-link" type="button" data-target="dhatu-table">Tables -> Dhaturupa</button>
+    </nav>
+  </header>
+
+  <main class="sections" aria-live="polite">
+    <section id="hero" class="full-section hero-section">
+      <div class="hero-card">
+        <h1 class="hero-title">shiksha sanskrutam</h1>
+        <p class="hero-subtitle">Sanskrit Helper</p>
+        <p class="hero-intro">
+          A focused learning space for school students to explore Sanskrit grammar,
+          translation, word meaning, and practice tables in one calm interface.
+        </p>
+      </div>
+
+      <nav class="hero-nav" aria-label="Feature navigation">
+        <button class="nav-link" type="button" data-target="grammar-help">Grammar Help</button>
+        <button class="nav-link" type="button" data-target="translation">Translation</button>
+        <button class="nav-link" type="button" data-target="dictionary">Dictionary</button>
+        <button class="nav-link" type="button" data-target="smart-editor-view">Smart Editor</button>
+        <button class="nav-link" type="button" data-target="vibhakti-table">Tables -> Vibhakti</button>
+        <button class="nav-link" type="button" data-target="dhatu-table">Tables -> Dhaturupa</button>
+      </nav>
+    </section>
+
+    <section id="grammar-help" class="full-section">
+      <div class="section-card">
+        <h2 class="sanskrit-text">Grammer Helper <span class="title-suffix">- व्याकरण सहायता</span></h2>
+        <div class="search-input-container glass-card" role="search">
+          <input
+            id="search-rule"
+            type="text"
+            placeholder="Enter rule name (e.g., sandhi, vibhakti)"
+            aria-label="Search grammar rule"
+          />
+        </div>
+        <div id="rule-result"></div>
+      </div>
+    </section>
+
+    <section id="translation" class="full-section">
+      <div class="section-card">
+        <h2 class="sanskrit-text">Translation <span class="title-suffix">- अनुवद</span></h2>
+        <div class="translation-grid">
+          <div class="translation-block">
+            <label for="sanskrit-input" class="sanskrit-text">Sanskrit to English</label>
+            <textarea
+              id="sanskrit-input"
+              class="glass-card translate-textarea sanskrit-text"
+              rows="4"
+              placeholder="Enter Sanskrit sentence"
+            ></textarea>
+            <button id="translate-btn" class="translate-btn" type="button">Translate</button>
+          </div>
+
+          <div class="translation-block">
+            <label for="english-input">English to Sanskrit</label>
+            <textarea
+              id="english-input"
+              class="glass-card translate-textarea"
+              rows="4"
+              placeholder="Enter English sentence"
+            ></textarea>
+            <button id="reverse-translate-btn" class="translate-btn" type="button">Translate</button>
+          </div>
+        </div>
+        <div id="translation-output"></div>
+      </div>
+    </section>
+
+    <section id="dictionary" class="full-section">
+      <div class="section-card">
+        <h2 class="sanskrit-text">Dictionary <span class="title-suffix">- शब्दार्थः</span></h2>
+        <div class="search-input-container glass-card" role="search">
+          <input
+            id="search-word"
+            type="text"
+            placeholder="Enter Sanskrit word"
+            aria-label="Search Sanskrit word"
+          />
+        </div>
+        <div id="definition-result"></div>
+        <button id="pronounce-btn" class="translate-btn" type="button">Pronounce</button>
+      </div>
+    </section>
+
+    <section id="smart-editor" class="full-section">
+      <div id="smart-editor-view" class="section-card">
+        <div class="editor-pane">
+          <h2 class="sanskrit-text">रचना-सहायकः <span class="title-suffix">(Smart Editor)</span></h2>
+          <textarea
+            id="editor-input"
+            class="glass-panel editor-textarea sanskrit-text"
+            placeholder="Type here in English (e.g., aham gachhati) to see magic..."
+          ></textarea>
+          <button id="analyze-btn" class="search-btn" type="button">Analyze Text</button>
+          <div id="editor-highlight-display" class="glass-panel" hidden></div>
+        </div>
+
+        <aside id="suggestions-sidebar" class="glass-panel">
+          <h3>AI Suggestions</h3>
+        </aside>
+      </div>
+    </section>
+
+    <section id="vibhakti-table" class="full-section">
+      <div class="section-card">
+        <h2 class="sanskrit-text">Case Table <span class="title-suffix">- विभक्ति तालिका</span></h2>
+        <div class="vibhakti-selector">
+          <label for="vibhakti-word" class="sanskrit-text">Select Word</label>
+          <select id="vibhakti-word" class="glass-card vibhakti-select sanskrit-text" aria-label="Select noun for vibhakti table">
+            <option value="ram">रामः</option>
+            <option value="sita">सीता</option>
+            <option value="phalam">फलम्</option>
+          </select>
+        </div>
+
+        <div class="result-card vibhakti-table-wrap">
+          <table id="vibhakti-table-body">
+            <thead>
+              <tr>
+                <th>Case</th>
+                <th>Singular</th>
+                <th>Dual</th>
+                <th>Plural</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="dhatu-table" class="full-section">
+      <div class="section-card">
+        <h2 class="sanskrit-text">Verb Table <span class="title-suffix">- धातुरूप तालिका</span></h2>
+        <div class="vibhakti-selector">
+          <label for="dhatu-root" class="sanskrit-text">Select Verb Root</label>
+          <select id="dhatu-root" class="glass-card vibhakti-select sanskrit-text" aria-label="Select dhatu root">
+            <option value="bhu">भू - to be</option>
+            <option value="kri">कृ - to do</option>
+            <option value="gam">गम्/गच्छ - to go</option>
+          </select>
+        </div>
+
+        <div class="result-card vibhakti-table-wrap">
+          <table id="dhatu-table-body">
+            <thead>
+              <tr>
+                <th>Person</th>
+                <th>Present</th>
+                <th>Perfect</th>
+                <th>Future</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
