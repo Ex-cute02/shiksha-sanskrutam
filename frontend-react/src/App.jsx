@@ -1,5 +1,5 @@
-import { Navigate, Route, Routes } from "react-router-dom";
 import AppShell from "./layout/AppShell";
+import LandingHero from "./components/LandingHero";
 import DictionaryView from "./views/DictionaryView";
 import DhatuTableView from "./views/DhatuTableView";
 import GrammarHelpView from "./views/GrammarHelpView";
@@ -10,15 +10,28 @@ import VibhaktiTableView from "./views/VibhaktiTableView";
 function App() {
   return (
     <AppShell>
-      <Routes>
-        <Route path="/" element={<SmartEditorView />} />
-        <Route path="/grammar-help" element={<GrammarHelpView />} />
-        <Route path="/translation" element={<TranslationView />} />
-        <Route path="/dictionary" element={<DictionaryView />} />
-        <Route path="/vibhakti-table" element={<VibhaktiTableView />} />
-        <Route path="/dhatu-table" element={<DhatuTableView />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <div className="views-stack">
+        <LandingHero />
+
+        <div id="grammar-help" className="content-section">
+          <GrammarHelpView />
+        </div>
+        <div id="translation" className="content-section">
+          <TranslationView />
+        </div>
+        <div id="dictionary" className="content-section">
+          <DictionaryView />
+        </div>
+        <div id="smart-editor" className="content-section">
+          <SmartEditorView />
+        </div>
+        <div id="vibhakti-table" className="content-section">
+          <VibhaktiTableView />
+        </div>
+        <div id="dhatu-table" className="content-section">
+          <DhatuTableView />
+        </div>
+      </div>
     </AppShell>
   );
 }

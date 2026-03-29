@@ -46,6 +46,7 @@ function TranslationView() {
   return (
     <section className="panel-grid">
       <h2 className="panel-title">Translation - अनुवाद</h2>
+      <p className="panel-subtext">Translate between Sanskrit and English in either direction.</p>
 
       <div className="translation-grid">
         <div className="translation-block">
@@ -61,7 +62,7 @@ function TranslationView() {
             onChange={(event) => setSanskritText(event.target.value)}
           />
           <button type="button" className="search-btn" onClick={handleTranslate}>
-            Translate
+            Translate to English
           </button>
         </div>
 
@@ -80,7 +81,7 @@ function TranslationView() {
             className="search-btn"
             onClick={handleReverseTranslate}
           >
-            Translate
+            Translate to Sanskrit
           </button>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import ResultTable from "../components/ResultTable";
 import { vibhaktiData } from "../services/dataService";
 
 const caseNames = [
@@ -28,9 +29,20 @@ function VibhaktiTableView() {
     }));
   }, [selectedWord]);
 
+  const tableRows = rows.map((row) => ({
+    key: row.caseName,
+    cells: [
+      { content: row.caseName },
+      { content: row.singular, sanskrit: true },
+      { content: row.dual, sanskrit: true },
+      { content: row.plural, sanskrit: true },
+    ],
+  }));
+
   return (
     <section className="panel-grid">
-      <h2 className="panel-title">Case Table - विभक्ति तालिका</h2>
+      <h2 className="panel-title">Vibhakti Table - विभक्ति तालिका</h2>
+      <p className="panel-subtext">Review seven case forms across singular, dual, and plural.</p>
 
       <div className="selector-block">
         <label htmlFor="vibhakti-word" className="sanskrit-text">
@@ -48,28 +60,11 @@ function VibhaktiTableView() {
         </select>
       </div>
 
-      <div className="result-card table-wrap">
-        <table className="declension-table" id="vibhakti-table-body">
-          <thead>
-            <tr>
-              <th>Case</th>
-              <th>Singular</th>
-              <th>Dual</th>
-              <th>Plural</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.caseName}>
-                <td>{row.caseName}</td>
-                <td className="sanskrit-text">{row.singular}</td>
-                <td className="sanskrit-text">{row.dual}</td>
-                <td className="sanskrit-text">{row.plural}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <ResultTable
+        id="vibhakti-table-body"
+        headers={["Case", "Singular", "Dual", "Plural"]}
+        rows={tableRows}
+      />
     </section>
   );
 }

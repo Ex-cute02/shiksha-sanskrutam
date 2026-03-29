@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import EditorWorkspace from "../components/EditorWorkspace";
 import { analyzeSmartEditorText } from "../services/analysisService";
 import { transliterateToDevanagari } from "../services/transliterationService";
 
@@ -27,7 +27,6 @@ function renderHighlightedText(text, issueWord) {
 }
 
 function SmartEditorView() {
-  const navigate = useNavigate();
   const [editorText, setEditorText] = useState("अहम् विद्यालयं गच्छति");
   const [analysis, setAnalysis] = useState(() => analyzeSmartEditorText(""));
   const [showHighlight, setShowHighlight] = useState(false);
@@ -81,30 +80,16 @@ function SmartEditorView() {
   return (
     <section className="panel-grid">
       <h2 className="panel-title">रचना-सहायकः (Smart Editor)</h2>
+      <p className="panel-subtext">Analyze sentence agreement and apply contextual grammar fixes.</p>
 
       <div className="editor-layout">
-        <div className="editor-column panel-grid">
-          {!showHighlight ? (
-            <textarea
-              id="editor-input"
-              className="translate-textarea sanskrit-text"
-              rows={7}
-              placeholder="Type or paste Sanskrit text for grammar analysis"
-              value={editorText}
-              onChange={(event) => setEditorText(event.target.value)}
-            />
-          ) : null}
-
-          {showHighlight ? (
-            <div id="editor-highlight-display" className="editor-highlight-box sanskrit-text">
-              {renderHighlightedText(editorText, analysis.issueWord)}
-            </div>
-          ) : null}
-
-          <button id="analyze-btn" type="button" className="search-btn" onClick={handleAnalyze}>
-            Analyze Sentence
-          </button>
-        </div>
+        <EditorWorkspace
+          text={editorText}
+          showHighlight={showHighlight}
+          highlightedContent={renderHighlightedText(editorText, analysis.issueWord)}
+          onTextChange={setEditorText}
+          onAnalyze={handleAnalyze}
+        />
 
         <aside id="suggestions-sidebar" className="suggestions-sidebar">
           <h3>AI Suggestions</h3>
@@ -119,14 +104,6 @@ function SmartEditorView() {
               <div className="suggestion-actions">
                 <button id="apply-fix-btn" type="button" className="search-btn" onClick={handleApplyFix}>
                   Apply Fix
-                </button>
-                <button
-                  id="view-dhaturupa-btn"
-                  type="button"
-                  className="search-btn"
-                  onClick={() => navigate("/dhatu-table?root=gam")}
-                >
-                  View Dhaturupa
                 </button>
               </div>
             </div>

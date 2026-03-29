@@ -1,18 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useMemo, useState } from "react";
+import ResultTable from "../components/ResultTable";
 import { dhatuData } from "../services/dataService";
 
 function DhatuTableView() {
-  const [searchParams] = useSearchParams();
-  const requestedRoot = searchParams.get("root");
-  const resolvedRoot = requestedRoot && dhatuData[requestedRoot] ? requestedRoot : "bhu";
-  const [selectedRoot, setSelectedRoot] = useState(() => resolvedRoot);
-
-  useEffect(() => {
-    if (selectedRoot !== resolvedRoot) {
-      setSelectedRoot(resolvedRoot);
-    }
-  }, [resolvedRoot, selectedRoot]);
+  const [selectedRoot, setSelectedRoot] = useState("bhu");
 
   const rows = useMemo(() => {
     const data = dhatuData[selectedRoot];
@@ -28,9 +19,20 @@ function DhatuTableView() {
     }));
   }, [selectedRoot]);
 
+  const tableRows = rows.map((row) => ({
+    key: row.person,
+    cells: [
+      { content: row.person },
+      { content: row.present, sanskrit: true },
+      { content: row.perfect, sanskrit: true },
+      { content: row.future, sanskrit: true },
+    ],
+  }));
+
   return (
     <section className="panel-grid">
-      <h2 className="panel-title">Verb Table - धातुरूप तालिका</h2>
+      <h2 className="panel-title">Dhaturupa Table - धातुरूप तालिका</h2>
+      <p className="panel-subtext">Check verb forms by person across major tenses.</p>
 
       <div className="selector-block">
         <label htmlFor="dhatu-root" className="sanskrit-text">
@@ -48,28 +50,11 @@ function DhatuTableView() {
         </select>
       </div>
 
-      <div className="result-card table-wrap">
-        <table className="declension-table" id="dhatu-table-body">
-          <thead>
-            <tr>
-              <th>Person</th>
-              <th>Present</th>
-              <th>Perfect</th>
-              <th>Future</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.person}>
-                <td>{row.person}</td>
-                <td className="sanskrit-text">{row.present}</td>
-                <td className="sanskrit-text">{row.perfect}</td>
-                <td className="sanskrit-text">{row.future}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <ResultTable
+        id="dhatu-table-body"
+        headers={["Person", "Present", "Perfect", "Future"]}
+        rows={tableRows}
+      />
     </section>
   );
 }

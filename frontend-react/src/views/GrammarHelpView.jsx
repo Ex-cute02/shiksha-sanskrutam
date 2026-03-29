@@ -20,7 +20,8 @@ function GrammarHelpView() {
 
   return (
     <section className="panel-grid">
-      <h2 className="panel-title">Grammar Helper - व्याकरण सहायता</h2>
+      <h2 className="panel-title">Grammar Help - व्याकरण सहायता</h2>
+      <p className="panel-subtext">Search core rules and examples for quick reference.</p>
 
       <div className="input-shell">
         <input

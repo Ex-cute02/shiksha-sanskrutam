@@ -19,6 +19,7 @@ function DictionaryView() {
   return (
     <section className="panel-grid">
       <h2 className="panel-title">Dictionary - शब्दार्थः</h2>
+      <p className="panel-subtext">Find Sanskrit word meanings with part-of-speech tags.</p>
 
       <div className="input-shell">
         <input
@@ -54,7 +55,7 @@ function DictionaryView() {
         className="search-btn"
         onClick={() => playPronunciation(primaryWord)}
       >
-        Pronounce
+        Pronounce Word
       </button>
     </section>
   );

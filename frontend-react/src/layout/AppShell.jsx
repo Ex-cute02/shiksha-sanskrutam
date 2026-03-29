@@ -1,32 +1,23 @@
-import { useLocation, useNavigate } from "react-router-dom";
-
 const navItems = [
-  { to: "/grammar-help", label: "Grammar Help" },
-  { to: "/translation", label: "Translation" },
-  { to: "/dictionary", label: "Dictionary" },
-  { to: "/", label: "Smart Editor" },
-  { to: "/vibhakti-table", label: "Tables -> Vibhakti" },
-  { to: "/dhatu-table", label: "Tables -> Dhaturupa" },
+  { href: "#hero", label: "Home" },
+  { href: "#grammar-help", label: "Grammar Help" },
+  { href: "#translation", label: "Translation" },
+  { href: "#dictionary", label: "Dictionary" },
+  { href: "#smart-editor", label: "Smart Editor" },
+  { href: "#vibhakti-table", label: "Tables -> Vibhakti" },
+  { href: "#dhatu-table", label: "Tables -> Dhaturupa" },
 ];
 
 function AppShell({ children }) {
-  const navigate = useNavigate();
-  const location = useLocation();
-
   return (
     <div className="app-shell">
       <header className="app-header">
         <h1 className="app-title">shiksha sanskrutam</h1>
         <nav className="top-nav" aria-label="Main navigation">
           {navItems.map((item) => (
-            <button
-              key={item.to}
-              type="button"
-              className={`nav-link ${location.pathname === item.to ? "active" : ""}`}
-              onClick={() => navigate(item.to)}
-            >
+            <a key={item.href} className="nav-link" href={item.href}>
               {item.label}
-            </button>
+            </a>
           ))}
         </nav>
       </header>
