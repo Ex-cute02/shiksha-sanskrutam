@@ -33,16 +33,21 @@ jobs:
           gcloud builds submit --tag $IMAGE
 
       - name: Ensure Google Secret Manager secret for translate creds
-        if: ${{ secrets.GOOGLE_CREDS != '' }}
         env:
           GOOGLE_CREDS: ${{ secrets.GOOGLE_CREDS }}
         run: |
-          # Create secret if it does not exist, then add a version with the provided JSON
-          SECRET_NAME=translate-creds
-          if ! gcloud secrets describe $SECRET_NAME --project=${{ secrets.GCP_PROJECT }} >/dev/null 2>&1; then
-            gcloud secrets create $SECRET_NAME --project=${{ secrets.GCP_PROJECT }} --replication-policy="automatic"
+          # Create secret if it does not exist, then add a version with the provided JSON.
+          # If GOOGLE_CREDS is empty, skip this step without failing the workflow.
+          if [ -z "$GOOGLE_CREDS" ]; then
+            echo "GOOGLE_CREDS is empty; skipping Secret Manager setup"
+            exit 0
           fi
-          echo "$GOOGLE_CREDS" | gcloud secrets versions add $SECRET_NAME --data-file=- --project=${{ secrets.GCP_PROJECT }}
+
+          SECRET_NAME=translate-creds
+          if ! gcloud secrets describe "$SECRET_NAME" --project=${{ secrets.GCP_PROJECT }} >/dev/null 2>&1; then
+            gcloud secrets create "$SECRET_NAME" --project=${{ secrets.GCP_PROJECT }} --replication-policy="automatic"
+          fi
+          printf '%s' "$GOOGLE_CREDS" | gcloud secrets versions add "$SECRET_NAME" --data-file=- --project=${{ secrets.GCP_PROJECT }}
 
       - name: Deploy to Cloud Run
         env:
