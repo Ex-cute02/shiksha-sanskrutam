@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
+      packages: 'write'
 
     steps:
       - name: Checkout
@@ -25,13 +26,13 @@ jobs:
         with:
           project_id: '${{ secrets.GCP_PROJECT }}'
 
-      - name: Configure Docker for Google Container Registry
+      - name: Login to GitHub Container Registry
         run: |
-          gcloud auth configure-docker --quiet
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
 
       - name: Build and push container image
         env:
-          IMAGE: gcr.io/${{ secrets.GCP_PROJECT }}/sanskrit-master:${{ github.sha }}
+          IMAGE: ghcr.io/${{ github.repository_owner }}/sanskrit-master:${{ github.sha }}
         run: |
           echo "Building $IMAGE"
           docker build -t "$IMAGE" -f backend/Dockerfile backend
@@ -56,7 +57,7 @@ jobs:
 
       - name: Deploy to Cloud Run
         env:
-          IMAGE: gcr.io/${{ secrets.GCP_PROJECT }}/sanskrit-master:${{ github.sha }}
+          IMAGE: ghcr.io/${{ github.repository_owner }}/sanskrit-master:${{ github.sha }}
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           echo "Deploying $IMAGE to Cloud Run"
