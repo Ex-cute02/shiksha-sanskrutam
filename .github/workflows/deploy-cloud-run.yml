@@ -25,12 +25,17 @@ jobs:
         with:
           project_id: '${{ secrets.GCP_PROJECT }}'
 
+      - name: Configure Docker for Google Container Registry
+        run: |
+          gcloud auth configure-docker --quiet
+
       - name: Build and push container image
         env:
           IMAGE: gcr.io/${{ secrets.GCP_PROJECT }}/sanskrit-master:${{ github.sha }}
         run: |
           echo "Building $IMAGE"
-          gcloud builds submit backend --tag $IMAGE
+          docker build -t "$IMAGE" -f backend/Dockerfile backend
+          docker push "$IMAGE"
 
       - name: Ensure Google Secret Manager secret for translate creds
         env:
