@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 
 const navItems = [
-  { href: "#grammar-help", label: "Grammar Help" },
+  { href: "#sandhi-helper", label: "Sandhi Helper" },
   { href: "#translation", label: "Translation" },
   { href: "#dictionary", label: "Dictionary" },
   { href: "#smart-editor", label: "Smart Editor" },
-  { href: "#vibhakti-table", label: "Tables -> Vibhakti" },
+  { href: "#noun-table", label: "Tables -> Noun" },
   { href: "#dhatu-table", label: "Tables -> Dhaturupa" },
 ];
 

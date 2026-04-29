@@ -1,9 +1,8 @@
 const navLinks = [
-  { href: "#grammar-help", label: "Grammar Help" },
+  { href: "#sandhi-helper", label: "Sandhi Helper" },
   { href: "#translation", label: "Translation" },
   { href: "#dictionary", label: "Dictionary" },
   { href: "#smart-editor", label: "Smart Editor" },
-  { href: "#vibhakti-table", label: "Tables -> Vibhakti" },
   { href: "#dhatu-table", label: "Tables -> Dhaturupa" },
 ];
 

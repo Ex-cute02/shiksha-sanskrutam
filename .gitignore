@@ -13,6 +13,9 @@ sanskrit-master-release.zip
 release/
 release_inspect/
 
+# Large data (Monier dictionary) — keep out of repo
+Monier Williams Sanskrit English Dictionary/
+
 # Temp and logs
 package_log.txt
 _tmp*

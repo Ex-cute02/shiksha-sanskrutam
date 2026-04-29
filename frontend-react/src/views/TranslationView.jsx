@@ -1,46 +1,82 @@
 import { useState } from "react";
-
-async function mockTranslateApi(direction) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      if (direction === "sa-en") {
-        resolve("This is a simple Sanskrit sentence example.");
-        return;
-      }
-
-      resolve("अयम् एकः सरलः वाक्यः अस्ति।");
-    }, 280);
-  });
-}
+import { translateText } from "../services/api";
 
 function TranslationView() {
   const [sanskritText, setSanskritText] = useState("");
   const [englishText, setEnglishText] = useState("");
   const [outputText, setOutputText] = useState("");
+  const [secondaryText, setSecondaryText] = useState("");
+  const [engineUsed, setEngineUsed] = useState("");
+  const [confidence, setConfidence] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [outputIsSanskrit, setOutputIsSanskrit] = useState(false);
 
   const handleTranslate = async () => {
     if (!sanskritText.trim()) {
       setOutputText("Please enter a Sanskrit sentence first.");
+      setSecondaryText("");
+      setEngineUsed("");
+      setConfidence(null);
       setOutputIsSanskrit(false);
       return;
     }
 
-    const translated = await mockTranslateApi("sa-en");
-    setOutputText(translated);
-    setOutputIsSanskrit(false);
+    setLoading(true);
+    try {
+      const translated = await translateText({
+        text: sanskritText,
+        sourceLang: "sa",
+        targetLang: "en",
+        includeSecondary: true,
+      });
+      setOutputText(translated.primary ?? "");
+      setSecondaryText(translated.secondary ?? "");
+      setEngineUsed(translated.engine_used ?? "");
+      setConfidence(typeof translated.confidence === "number" ? translated.confidence : null);
+      setOutputIsSanskrit(false);
+    } catch (error) {
+      setOutputText(error.message || "Translation failed.");
+      setSecondaryText("");
+      setEngineUsed("");
+      setConfidence(null);
+      setOutputIsSanskrit(false);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleReverseTranslate = async () => {
     if (!englishText.trim()) {
       setOutputText("Please enter an English sentence first.");
+      setSecondaryText("");
+      setEngineUsed("");
+      setConfidence(null);
       setOutputIsSanskrit(false);
       return;
     }
 
-    const translated = await mockTranslateApi("en-sa");
-    setOutputText(translated);
-    setOutputIsSanskrit(true);
+    setLoading(true);
+    try {
+      const translated = await translateText({
+        text: englishText,
+        sourceLang: "en",
+        targetLang: "sa",
+        includeSecondary: true,
+      });
+      setOutputText(translated.primary ?? "");
+      setSecondaryText(translated.secondary ?? "");
+      setEngineUsed(translated.engine_used ?? "");
+      setConfidence(typeof translated.confidence === "number" ? translated.confidence : null);
+      setOutputIsSanskrit(true);
+    } catch (error) {
+      setOutputText(error.message || "Translation failed.");
+      setSecondaryText("");
+      setEngineUsed("");
+      setConfidence(null);
+      setOutputIsSanskrit(false);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -64,7 +100,7 @@ function TranslationView() {
             onChange={(event) => setSanskritText(event.target.value)}
           />
           <button type="button" className="search-btn" onClick={handleTranslate}>
-            Translate
+            {loading ? "Translating..." : "Translate"}
           </button>
         </div>
 
@@ -83,7 +119,7 @@ function TranslationView() {
             className="search-btn"
             onClick={handleReverseTranslate}
           >
-            Translate
+            {loading ? "Translating..." : "Translate"}
           </button>
         </div>
       </div>
@@ -93,6 +129,14 @@ function TranslationView() {
           <div className="result-card">
             <h3>Translation Output</h3>
             <p className={outputIsSanskrit ? "sanskrit-text" : ""}>{outputText}</p>
+            {secondaryText ? (
+              <>
+                <h3>Secondary Output</h3>
+                <p className={outputIsSanskrit ? "sanskrit-text" : ""}>{secondaryText}</p>
+              </>
+            ) : null}
+            {engineUsed ? <p><strong>Engine:</strong> {engineUsed}</p> : null}
+            {typeof confidence === "number" ? <p><strong>Confidence (agreement):</strong> {confidence}</p> : null}
           </div>
         ) : null}
       </div>

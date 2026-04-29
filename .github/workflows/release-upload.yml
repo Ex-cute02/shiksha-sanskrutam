@@ -1,0 +1,34 @@
+name: Upload Release ZIP
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  upload-zip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Ensure release ZIP exists
+        run: |
+          if [ ! -f "sanskrit-master-release.zip" ]; then
+            echo "ZIP not found in repo root; running packaging script"
+            pwsh -NoProfile -NonInteractive -Command './package_release.ps1'
+          fi
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+
+      - name: Upload release asset
+        uses: softprops/attachments@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: sanskrit-master-release.zip
+          asset_name: sanskrit-master-release.zip
+          asset_content_type: application/zip

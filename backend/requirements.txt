@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+pydantic
+httpx
+beautifulsoup4
+google-cloud-translate==3.15.0
+torch
+transformers
+sentencepiece
+sacremoses
+langdetect

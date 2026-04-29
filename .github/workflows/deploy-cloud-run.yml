@@ -1,0 +1,79 @@
+name: Deploy to Google Cloud Run
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: Set up gcloud CLI
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: '${{ secrets.GCP_PROJECT }}'
+
+      - name: Build and push container image
+        env:
+          IMAGE: gcr.io/${{ secrets.GCP_PROJECT }}/sanskrit-master:${{ github.sha }}
+        run: |
+          echo "Building $IMAGE"
+          gcloud builds submit --tag $IMAGE
+
+      - name: Ensure Google Secret Manager secret for translate creds
+        if: ${{ secrets.GOOGLE_CREDS != '' }}
+        env:
+          GOOGLE_CREDS: ${{ secrets.GOOGLE_CREDS }}
+        run: |
+          # Create secret if it does not exist, then add a version with the provided JSON
+          SECRET_NAME=translate-creds
+          if ! gcloud secrets describe $SECRET_NAME --project=${{ secrets.GCP_PROJECT }} >/dev/null 2>&1; then
+            gcloud secrets create $SECRET_NAME --project=${{ secrets.GCP_PROJECT }} --replication-policy="automatic"
+          fi
+          echo "$GOOGLE_CREDS" | gcloud secrets versions add $SECRET_NAME --data-file=- --project=${{ secrets.GCP_PROJECT }}
+
+      - name: Deploy to Cloud Run
+        env:
+          IMAGE: gcr.io/${{ secrets.GCP_PROJECT }}/sanskrit-master:${{ github.sha }}
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          echo "Deploying $IMAGE to Cloud Run"
+          # If GOOGLE_CREDS secret exists in Secret Manager, attach it as env var via --set-secrets
+          if gcloud secrets describe translate-creds --project=${{ secrets.GCP_PROJECT }} >/dev/null 2>&1; then
+            gcloud run deploy sanskrit-master \
+              --image $IMAGE \
+              --platform managed \
+              --region ${{ secrets.GCP_REGION }} \
+              --allow-unauthenticated \
+              --set-env-vars HF_TOKEN=${HF_TOKEN} \
+              --set-secrets GOOGLE_APPLICATION_CREDENTIALS=translate-creds:latest
+          else
+            gcloud run deploy sanskrit-master \
+              --image $IMAGE \
+              --platform managed \
+              --region ${{ secrets.GCP_REGION }} \
+              --allow-unauthenticated \
+              --set-env-vars HF_TOKEN=${HF_TOKEN}
+          fi
+
+      - name: Post-deploy info
+        run: |
+          echo "Deployed to Cloud Run. Use 'gcloud run services describe sanskrit-master --region=${{ secrets.GCP_REGION }} --format='value(status.url')' to get the service URL"
+
+# Required repository secrets:
+# - GCP_SA_KEY: Service account JSON contents (for GitHub Actions)
+# - GCP_PROJECT: Google Cloud project id
+# - GCP_REGION: Cloud Run region (e.g. us-central1)
+# - HF_TOKEN: Hugging Face token for model downloads
