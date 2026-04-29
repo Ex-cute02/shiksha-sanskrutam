@@ -26,13 +26,17 @@ jobs:
         with:
           project_id: '${{ secrets.GCP_PROJECT }}'
 
-      - name: Configure Docker for Google Container Registry
-        run: |
-          gcloud auth configure-docker --quiet
-
-      - name: Build and push container image to GCR
+      - name: Configure Docker for Artifact Registry
         env:
-          IMAGE: gcr.io/${{ secrets.GCP_PROJECT }}/sanskrit-master:${{ github.sha }}
+          REGION: ${{ secrets.GCP_REGION }}
+        run: |
+          # Configure Docker credential helper for the Artifact Registry host in the target region
+          gcloud auth configure-docker ${REGION}-docker.pkg.dev --quiet
+
+      - name: Build and push container image to Artifact Registry
+        env:
+          REGION: ${{ secrets.GCP_REGION }}
+          IMAGE: ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/sanskrit-master/sanskrit-master:${{ github.sha }}
         run: |
           echo "Building $IMAGE"
           docker build -t "$IMAGE" -f backend/Dockerfile backend
@@ -57,7 +61,8 @@ jobs:
 
       - name: Deploy to Cloud Run
         env:
-          IMAGE: gcr.io/${{ secrets.GCP_PROJECT }}/sanskrit-master:${{ github.sha }}
+          REGION: ${{ secrets.GCP_REGION }}
+          IMAGE: ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/sanskrit-master/sanskrit-master:${{ github.sha }}
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           echo "Deploying $IMAGE to Cloud Run"

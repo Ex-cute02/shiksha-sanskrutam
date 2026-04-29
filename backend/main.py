@@ -11,6 +11,7 @@ import urllib.parse
 import uvicorn
 import requests
 from pathlib import Path
+from threading import Lock
 from bs4 import BeautifulSoup
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -247,7 +248,19 @@ class AnalyzeResponse(BaseModel):
     errors: List[ErrorDetail]
 
 
-translation_pipeline = SanskritTranslationPipeline()
+translation_pipeline = None
+translation_pipeline_lock = Lock()
+
+
+def get_translation_pipeline() -> SanskritTranslationPipeline:
+    global translation_pipeline
+
+    if translation_pipeline is None:
+        with translation_pipeline_lock:
+            if translation_pipeline is None:
+                translation_pipeline = SanskritTranslationPipeline()
+
+    return translation_pipeline
 
 
 async def call_scl_api(text: str) -> dict:
@@ -1343,7 +1356,7 @@ async def translate_text(request: TranslateRequest) -> dict:
     if not text:
         raise HTTPException(status_code=400, detail="Text is required")
 
-    result = translation_pipeline.translate(
+    result = get_translation_pipeline().translate(
         text=text,
         source_lang=request.source_lang,
         target_lang=request.target_lang,
@@ -1530,4 +1543,7 @@ async def get_noun_table(
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    import os
+
+    port = int(os.getenv("PORT", "8000"))
+    uvicorn.run(app, host="0.0.0.0", port=port)
