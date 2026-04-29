@@ -30,7 +30,7 @@ jobs:
           IMAGE: gcr.io/${{ secrets.GCP_PROJECT }}/sanskrit-master:${{ github.sha }}
         run: |
           echo "Building $IMAGE"
-          gcloud builds submit --tag $IMAGE
+          gcloud builds submit backend --tag $IMAGE
 
       - name: Ensure Google Secret Manager secret for translate creds
         env:
