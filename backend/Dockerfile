@@ -13,8 +13,8 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
-COPY requirements_freeze.txt ./
-RUN pip install --no-cache-dir -r requirements_freeze.txt
+COPY requirements_docker.txt ./
+RUN pip install --no-cache-dir -r requirements_docker.txt
 
 # Copy application code
 COPY . /app
