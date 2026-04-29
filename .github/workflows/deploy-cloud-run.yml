@@ -26,13 +26,13 @@ jobs:
         with:
           project_id: '${{ secrets.GCP_PROJECT }}'
 
-      - name: Login to GitHub Container Registry
+      - name: Configure Docker for Google Container Registry
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          gcloud auth configure-docker --quiet
 
-      - name: Build and push container image
+      - name: Build and push container image to GCR
         env:
-          IMAGE: ghcr.io/ex-cute02/sanskrit-master:${{ github.sha }}
+          IMAGE: gcr.io/${{ secrets.GCP_PROJECT }}/sanskrit-master:${{ github.sha }}
         run: |
           echo "Building $IMAGE"
           docker build -t "$IMAGE" -f backend/Dockerfile backend
@@ -57,7 +57,7 @@ jobs:
 
       - name: Deploy to Cloud Run
         env:
-          IMAGE: ghcr.io/ex-cute02/sanskrit-master:${{ github.sha }}
+          IMAGE: gcr.io/${{ secrets.GCP_PROJECT }}/sanskrit-master:${{ github.sha }}
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           echo "Deploying $IMAGE to Cloud Run"
@@ -81,7 +81,7 @@ jobs:
 
       - name: Post-deploy info
         run: |
-          echo "Deployed to Cloud Run. Use 'gcloud run services describe sanskrit-master --region=${{ secrets.GCP_REGION }} --format='value(status.url')' to get the service URL"
+          echo "Deployed to Cloud Run. Use: gcloud run services describe sanskrit-master --region=${{ secrets.GCP_REGION }} --format='value(status.url)' to get the service URL"
 
 # Required repository secrets:
 # - GCP_SA_KEY: Service account JSON contents (for GitHub Actions)
