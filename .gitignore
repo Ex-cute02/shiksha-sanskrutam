@@ -1,0 +1,21 @@
+# Runtime / env
+.venv/
+__pycache__/
+*.pyc
+
+# Node / build
+node_modules/
+frontend-react/dist/
+dist/
+
+# Release artifacts
+sanskrit-master-release.zip
+release/
+release_inspect/
+
+# Temp and logs
+package_log.txt
+_tmp*
+
+# Hugging Face cache (do not commit heavy model files)
+.cache/huggingface/
